@@ -1,28 +1,30 @@
 module.exports = platform => [{
-  name: () => `${platform}/build.gradle`,
-  content: ({ packageIdentifier }) => `
+    name: () => `${platform}/build.gradle`,
+    content: ({ packageIdentifier }) => `
 buildscript {
     repositories {
         jcenter()
     }
 
     dependencies {
-        // Matches the RN Hello World template
-        // https://github.com/facebook/react-native/blob/1e8f3b11027fe0a7514b4fc97d0798d3c64bc895/local-cli/templates/HelloWorld/android/build.gradle#L8
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
+def DEFAULT_COMPILE_SDK_VERSION = 27
+def DEFAULT_BUILD_TOOLS_VERSION = "27.0.3"
+def DEFAULT_TARGET_SDK_VERSION = 26
+
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+    buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 16
+        targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
     }
@@ -33,16 +35,13 @@ android {
 
 repositories {
     maven {
-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-        // Matches the RN Hello World template
-        // https://github.com/facebook/react-native/blob/1e8f3b11027fe0a7514b4fc97d0798d3c64bc895/local-cli/templates/HelloWorld/android/build.gradle#L21
         url "$projectDir/../node_modules/react-native/android"
     }
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
+    api 'com.facebook.react:react-native:+'
 }
 
 def configureReactNativePom(def pom) {
@@ -117,17 +116,17 @@ afterEvaluate { project ->
 }
   `,
 }, {
-  name: () => `${platform}/src/main/AndroidManifest.xml`,
-  content: ({ packageIdentifier }) => `
+    name: () => `${platform}/src/main/AndroidManifest.xml`,
+    content: ({ packageIdentifier }) => `
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="${packageIdentifier}">
 
 </manifest>
   `,
 }, {
-  name: ({ packageIdentifier, name }) =>
-    `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Module.java`,
-  content: ({ packageIdentifier, name }) => `
+    name: ({ packageIdentifier, name }) =>
+        `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Module.java`,
+    content: ({ packageIdentifier, name }) => `
 package ${packageIdentifier};
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -150,9 +149,9 @@ public class ${name}Module extends ReactContextBaseJavaModule {
   }
 }`,
 }, {
-  name: ({ packageIdentifier, name }) =>
-    `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Package.java`,
-  content: ({ packageIdentifier, name }) => `
+    name: ({ packageIdentifier, name }) =>
+        `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Package.java`,
+    content: ({ packageIdentifier, name }) => `
 package ${packageIdentifier};
 
 import java.util.Arrays;
@@ -181,8 +180,8 @@ public class ${name}Package implements ReactPackage {
     }
 }`,
 }, {
-  name: () => `${platform}/README.md`,
-  content: () => `
+    name: () => `${platform}/README.md`,
+    content: () => `
 README
 ======
 
