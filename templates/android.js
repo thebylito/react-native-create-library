@@ -3,6 +3,10 @@ module.exports = platform => [{
     content: ({ packageIdentifier }) => `
 buildscript {
     repositories {
+        google()
+        maven {
+            url "https://maven.google.com"
+        }
         jcenter()
     }
 
@@ -112,6 +116,10 @@ afterEvaluate { project ->
 
             configureReactNativePom pom
         }
+    }
+
+    task clean(type: Delete) {
+        delete rootProject.buildDir
     }
 }
   `,
