@@ -10,12 +10,12 @@ const { execSync } = require('child_process');
 const DEFAULT_NAME = 'Library';
 const DEFAULT_PREFIX = 'RN';
 const DEFAULT_MODULE_PREFIX = 'react-native';
-const DEFAULT_PACKAGE_IDENTIFIER = 'com.reactlibrary';
+const DEFAULT_PACKAGE_IDENTIFIER = 'com.thebylito';
 const DEFAULT_PLATFORMS = ['android', 'ios', 'windows'];
 const DEFAULT_OVERRIDE_PREFIX = false;
-const DEFAULT_GITHUB_ACCOUNT = 'github_account'
-const DEFAULT_AUTHOR_NAME = 'Your Name'
-const DEFAULT_AUTHOR_EMAIL = 'yourname@email.com'
+const DEFAULT_GITHUB_ACCOUNT = 'thebylito'
+const DEFAULT_AUTHOR_NAME = 'Welington da Silva'
+const DEFAULT_AUTHOR_EMAIL = 'thebylito@gmail.com'
 const DEFAULT_LICENSE = 'Apache-2.0'
 const DEFAULT_GENERATE_EXAMPLE = false;
 
