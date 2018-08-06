@@ -195,7 +195,9 @@ package ${packageIdentifier};
 import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.View;
+import android.view.View;
+
+import java.util.Map;
 
 
 import com.facebook.infer.annotation.Assertions;
