@@ -182,7 +182,7 @@ public class ${name}Package implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-            new ${packageIdentifier.split('.').join('/')}/${name}Manager()
+            new ${name}Manager()
     );
     }
 }`,
