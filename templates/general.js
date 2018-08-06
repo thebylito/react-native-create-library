@@ -76,6 +76,7 @@ ${name};
   content: ({ moduleName, platforms, githubAccount, authorName, authorEmail, license }) => {
     let dependencies = `
     "react": "16.0.0-alpha.6",
+    "prop-types": "^15.6.2"
     "react-native": "^0.55.4"`;
     if (platforms.indexOf('windows') >= 0) {
       dependencies += `,
@@ -119,11 +120,69 @@ ${name};
 }, {
   name: () => 'index.js',
   content: ({ name }) => `
-import { NativeModules } from 'react-native';
+import React, { Component } from 'react'
+import { NativeModules, requireNativeComponent, ViewPropTypes, UIManager, findNodeHandle } from 'react-native';
+import PropTypes from 'prop-types'
 
-const { ${name} } = NativeModules;
+//const { ${name} } = NativeModules;
+
+const iface = {
+  name: '${name}Manager',
+  propTypes: {
+      prop: PropTypes.string,
+      ...ViewPropTypes
+  }
+
+};
+const RCT${name} = requireNativeComponent('${name}Manager', iface);
+
+class ${name} extends Component {
+
+
+  start = () => {
+      UIManager.dispatchViewManagerCommand(
+          findNodeHandle(this),
+          UIManager.${name}Manager.Commands.startVideo,
+          [],
+      );
+  }
+
+  pause = () => {
+      UIManager.dispatchViewManagerCommand(
+          findNodeHandle(this),
+          UIManager.${name}Manager.Commands.resetVideo,
+          [],
+      );
+  }
+
+  render() {
+      return <RCT${name} ref={video => { this.video = video }} {...this.props} />
+  }
+}
+
 
 export default ${name};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 `,
 }, {
   name: () => '.gitignore',

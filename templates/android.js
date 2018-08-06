@@ -229,7 +229,7 @@ public class ${name}Manager extends SimpleViewManager<View> {
     }
 
     @ReactProp(name = "prop")
-    public void methodProp(View view) {
+    public void methodProp(View view, String prop) {
 
     }
 
