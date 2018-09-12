@@ -136,7 +136,6 @@ package ${packageIdentifier};
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
 
 public class ${name}Module extends ReactContextBaseJavaModule {
 
@@ -151,6 +150,12 @@ public class ${name}Module extends ReactContextBaseJavaModule {
   public String getName() {
     return "${name}";
   }
+
+  @ReactMethod
+  public void acao(){
+    Log.d("RNNA", "OLAAAAA");
+  }
+
 }`,
 }, {
     name: ({ packageIdentifier, name }) =>
@@ -211,7 +216,7 @@ public class ${name}Manager extends SimpleViewManager<View> {
     private ThemedReactContext mContext = null;
     private Activity mActivity = null;
 
-    public static final String REACT_CLASS = " ${name}Manager";
+    public static final String REACT_CLASS = "${name}Manager";
     public static final int NAME = 1;
     public static final int NAME2 = 2;
 
