@@ -121,10 +121,10 @@ ${name};
   name: () => 'index.js',
   content: ({ name }) => `
 import React, { Component } from 'react'
-import { NativeModules, requireNativeComponent, ViewPropTypes, UIManager, findNodeHandle } from 'react-native';
+import { requireNativeComponent, ViewPropTypes, UIManager, findNodeHandle, NativeModules } from 'react-native';
 import PropTypes from 'prop-types'
 
-//const { ${name} } = NativeModules;
+const { ${name} } = NativeModules;
 
 const iface = {
   name: '${name}Manager',
@@ -136,13 +136,13 @@ const iface = {
 };
 const RCT${name} = requireNativeComponent('${name}Manager', iface);
 
-class ${name} extends Component {
+class ${name}View extends Component {
 
 
   start = () => {
       UIManager.dispatchViewManagerCommand(
           findNodeHandle(this),
-          UIManager.${name}Manager.Commands.startVideo,
+          UIManager.${name}Manager.Commands.name,
           [],
       );
   }
@@ -150,18 +150,19 @@ class ${name} extends Component {
   pause = () => {
       UIManager.dispatchViewManagerCommand(
           findNodeHandle(this),
-          UIManager.${name}Manager.Commands.resetVideo,
+          UIManager.${name}Manager.Commands.name2,
           [],
       );
   }
 
   render() {
-      return <RCT${name} ref={video => { this.video = video }} {...this.props} />
+      return <RCT${name} ref={myView => { this.myView = myView }} {...this.props} />
   }
 }
 
 
-export default ${name};
+export default ${name}View;
+export { ${name} };
 
 
 

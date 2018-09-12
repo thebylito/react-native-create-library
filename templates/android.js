@@ -1,6 +1,6 @@
 module.exports = platform => [{
-    name: () => `${platform}/build.gradle`,
-    content: ({ packageIdentifier }) => `
+  name: () => `${platform}/build.gradle`,
+  content: ({ packageIdentifier }) => `
 buildscript {
     repositories {
         google()
@@ -20,21 +20,22 @@ apply plugin: 'maven'
 
 def DEFAULT_COMPILE_SDK_VERSION = 27
 def DEFAULT_BUILD_TOOLS_VERSION = "27.0.3"
+def DEFAULT_MIN_SDK_VERSION = 16
 def DEFAULT_TARGET_SDK_VERSION = 26
 
 android {
-    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
-    buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
+  compileSdkVersion rootProject.ext.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+  buildToolsVersion rootProject.ext.hasProperty('buildToolsVersion') ? rootProject.ext.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
 
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion rootProject.hasProperty('targetSdkVersion') ? rootProject.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
-        versionCode 1
-        versionName "1.0"
-    }
-    lintOptions {
-        abortOnError false
-    }
+  defaultConfig {
+    minSdkVersion rootProject.ext.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : DEFAULT_MIN_SDK_VERSION
+    targetSdkVersion rootProject.ext.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : DEFAULT_TARGET_SDK_VERSION
+    versionCode 1
+    versionName "1.0"
+  }
+  lintOptions {
+    abortOnError false
+  }
 }
 
 repositories {
@@ -120,23 +121,22 @@ afterEvaluate { project ->
 }
   `,
 }, {
-    name: () => `${platform}/src/main/AndroidManifest.xml`,
-    content: ({ packageIdentifier }) => `
+  name: () => `${platform}/src/main/AndroidManifest.xml`,
+  content: ({ packageIdentifier }) => `
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="${packageIdentifier}">
 
 </manifest>
   `,
 }, {
-    name: ({ packageIdentifier, name }) =>
-        `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Module.java`,
-    content: ({ packageIdentifier, name }) => `
+  name: ({ packageIdentifier, name }) =>
+    `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Module.java`,
+  content: ({ packageIdentifier, name }) => `
 package ${packageIdentifier};
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
 
 public class ${name}Module extends ReactContextBaseJavaModule {
 
@@ -151,11 +151,17 @@ public class ${name}Module extends ReactContextBaseJavaModule {
   public String getName() {
     return "${name}";
   }
+
+  @ReactMethod
+  public void acao(){
+    Log.d("RNNA", "OLAAAAA");
+  }
+
 }`,
 }, {
-    name: ({ packageIdentifier, name }) =>
-        `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Package.java`,
-    content: ({ packageIdentifier, name }) => `
+  name: ({ packageIdentifier, name }) =>
+    `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Package.java`,
+  content: ({ packageIdentifier, name }) => `
 package ${packageIdentifier};
 
 import java.util.Arrays;
@@ -187,9 +193,9 @@ public class ${name}Package implements ReactPackage {
     }
 }`,
 }, {
-    name: ({ packageIdentifier, name }) =>
-        `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Manager.java`,
-    content: ({ packageIdentifier, name }) => `
+  name: ({ packageIdentifier, name }) =>
+    `${platform}/src/main/java/${packageIdentifier.split('.').join('/')}/${name}Manager.java`,
+  content: ({ packageIdentifier, name }) => `
 package ${packageIdentifier};
 
 import android.app.Activity;
@@ -211,7 +217,7 @@ public class ${name}Manager extends SimpleViewManager<View> {
     private ThemedReactContext mContext = null;
     private Activity mActivity = null;
 
-    public static final String REACT_CLASS = " ${name}Manager";
+    public static final String REACT_CLASS = "${name}Manager";
     public static final int NAME = 1;
     public static final int NAME2 = 2;
 
@@ -269,8 +275,8 @@ public class ${name}Manager extends SimpleViewManager<View> {
     }
 }`,
 }, {
-    name: () => `${platform}/README.md`,
-    content: () => `
+  name: () => `${platform}/README.md`,
+  content: () => `
 README
 ======
 
