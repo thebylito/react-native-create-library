@@ -39,10 +39,12 @@ android {
 }
 
 repositories {
+    mavenLocal()
+    jcenter()
     maven {
-        url "$projectDir/../node_modules/react-native/android"
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url "$projectDir/../../../node_modules/react-native/android"
     }
-    mavenCentral()
 }
 
 dependencies {
